@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from app.schemas.auth_schema import (
     RegisterRequest,
-    LoginRequest
+    LoginRequest,
 )
 from app.services.auth_service import (
     register_user,
