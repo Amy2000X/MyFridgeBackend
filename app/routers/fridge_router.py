@@ -41,3 +41,24 @@ def get_fridge_items(
         auth["token"]
     )
 
+@router.put("/{item_id}")
+def update_fridge_item(
+    item_id: str,
+    data: UpdateFridgeItem,
+    auth=Depends(get_current_user)
+):
+    return update_item(
+        auth["token"],
+        item_id,
+        data
+    )
+
+@router.delete("/{item_id}")
+def delete_fridge_item(
+    item_id: str,
+    auth=Depends(get_current_user)
+):
+    return delete_item(
+        auth["token"],
+        item_id
+    )

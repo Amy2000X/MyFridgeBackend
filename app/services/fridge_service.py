@@ -31,3 +31,32 @@ def get_items(jwt):
 
     return response.data
 
+def update_item(jwt, item_id, data):
+    supabase = create_user_client(jwt)
+
+    response = (
+        supabase.table("fridge_items")
+        .update({
+            "name": data.name,
+            "quantity": data.quantity,
+            "unit": data.unit.value,
+            "status": data.status.value,
+            "expire_date": data.expire_date.isoformat()
+        })
+        .eq("id", item_id)
+        .execute()
+    )
+
+    return response.data
+
+def delete_item(jwt, item_id):
+    supabase = create_user_client(jwt)
+
+    response = (
+        supabase.table("fridge_items")
+        .delete()
+        .eq("id", item_id)
+        .execute()
+    )
+
+    return response.data
