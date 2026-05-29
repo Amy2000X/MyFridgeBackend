@@ -32,3 +32,12 @@ def create_fridge_item(
         auth["user"].id,
         data
     )
+
+@router.get("/items")
+def get_fridge_items(
+    auth=Depends(get_current_user)
+):
+    return get_items(
+        auth["token"]
+    )
+

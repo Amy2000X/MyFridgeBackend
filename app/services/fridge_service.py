@@ -19,3 +19,15 @@ def create_item(jwt, user_id, data):
     )
 
     return response.data
+
+def get_items(jwt):
+    supabase = create_user_client(jwt)
+
+    response = (
+        supabase.table("fridge_items")
+        .select("*")
+        .execute()
+    )
+
+    return response.data
+
