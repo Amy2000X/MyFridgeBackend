@@ -25,8 +25,21 @@
 from fastapi import FastAPI
 from app.routers.auth_router import router as auth_router
 from app.routers.fridge_router import router as fridge_router
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://http://localhost:52344/",
+        "http://localhost",
+        "https://localhost",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 app.include_router(auth_router)
 app.include_router(fridge_router)
