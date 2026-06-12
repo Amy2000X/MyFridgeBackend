@@ -30,6 +30,7 @@ def parse_product(product_json: dict):
     }
 
 def fetch_product(ean: str):
+    print(f"Searching OpenFoodFacts for {ean}")
 
     response = requests.get(
         f"{OPENFOODFACTS_URL}/{ean}.json"
