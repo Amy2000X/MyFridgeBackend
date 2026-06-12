@@ -15,7 +15,7 @@ class StatusEnum(str, Enum):
     expired = "expired"
 
 class CreateFridgeItem(BaseModel):
-    name: str
+    ean: str
     quantity: int
     unit: UnitEnum
     status: StatusEnum
@@ -23,8 +23,10 @@ class CreateFridgeItem(BaseModel):
 
 
 class UpdateFridgeItem(BaseModel):
-    name: str
     quantity: int
     unit: UnitEnum
     status: StatusEnum
     expire_date: datetime
+
+class ScanBarcodeRequest(BaseModel):
+    ean: str
