@@ -1,10 +1,10 @@
 from app.database import create_user_client
 from datetime import datetime, timedelta
-from services.product_service import get_or_create_product
+# from services.product_service import get_or_create_product
 
 from datetime import datetime, timedelta
 
-from services.product_service import get_or_create_product
+from app.services.product_service import get_or_create_product
 from app.database import create_user_client
 
 
