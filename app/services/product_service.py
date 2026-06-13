@@ -4,11 +4,14 @@ import requests
 
 # from config.supabase import supabase
 
-from app.database import (
-    create_user_client
-)
+from app.database import create_user_client
+from app.config import HEADER_EMAIL
 
 OPENFOODFACTS_URL = "https://world.openfoodfacts.org/api/v2/product"
+
+headers = {
+    f"User-Agent": "MyFridge/0.1 ({HEADER_EMAIL})"
+}
 
 # Gebruikt Externe API Open Food Facts
 def parse_product(product_json: dict):
@@ -30,27 +33,37 @@ def parse_product(product_json: dict):
     }
 
 def fetch_product(ean: str):
-    print(f"Searching OpenFoodFacts for {ean}")
 
-    response = requests.get(
-        f"{OPENFOODFACTS_URL}/{ean}.json"
-    )
+    try:
+        print(f"Searching OpenFoodFacts for {ean}")
 
-    if response.status_code != 200:
-        return None
+        url = f"{OPENFOODFACTS_URL}/{ean}.json"
+        response = requests.get(url, headers=headers, timeout=10)
 
-    data = response.json()
+        print(url)
+        print("Status:", response.status_code)
 
-    if data.get("status") == 0:
-        return None
+        response.raise_for_status()
 
-    return parse_product(data)
+        data = response.json()
+
+        print(data)
+
+        if data.get("status") == 0:
+            return None
+        print("Data retreived successfully from API")
+        return parse_product(data)
+
+    except Exception as e:
+        print("OpenFoodFacts error:", e)
+        raise
 
 # Checks in the database if the product exists, if not, adds a new product
 def get_or_create_product(jwt: str, ean: str):
 
     supabase = create_user_client(jwt)
 
+    print("Start search for product")
     existing = (
         supabase.table("products")
         .select("*")
@@ -58,6 +71,8 @@ def get_or_create_product(jwt: str, ean: str):
         .limit(1)
         .execute()
     )
+    
+    print(existing)
 
     if existing.data:
         return existing.data[0]
