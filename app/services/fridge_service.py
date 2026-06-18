@@ -1,8 +1,4 @@
 from app.database import create_user_client
-from datetime import datetime, timedelta
-# from services.product_service import get_or_create_product
-
-from datetime import datetime, timedelta
 
 from app.services.product_service import get_or_create_product
 from app.database import create_user_client
@@ -21,65 +17,37 @@ def create_item_from_barcode(jwt, user_id, ean):
 
     return response.data
 
-def create_item(jwt, user_id, data):
-    supabase = create_user_client(jwt)
+# def create_item(jwt, user_id, data):
+#     supabase = create_user_client(jwt)
 
-    product = get_or_create_product(jwt, data.ean)
+#     product = get_or_create_product(jwt, data.ean)
 
-    response = (
-        supabase.table("fridge_items")
-        .insert({
-            "user_id": user_id,
-            "product_id": product["id"],
-            "quantity": data.quantity,
-            "unit": data.unit.value,
-            "status": data.status.value,
-            "expire_date": data.expire_date.isoformat()
-        })
-        .execute()
-    )
+#     response = (
+#         supabase.table("fridge_items")
+#         .insert({
+#             "user_id": user_id,
+#             "product_id": product["id"],
+#             "quantity": data.quantity,
+#             "unit": data.unit.value,
+#             "status": data.status.value,
+#             "expire_date": data.expire_date.isoformat()
+#         })
+#         .execute()
+#     )
 
-    return response.data
+#     return response.data
 
 def get_items(jwt):
-    supabase = create_user_client(jwt)
-
-    response = (
-    supabase.table("fridge_items")
-    .select("""
-        *,
-        products(*)
-    """)
-    .execute()
-)
+    response = fridge_repository.get_all_items(jwt)
 
     return response.data
 
 def update_item(jwt, item_id, data):
-    supabase = create_user_client(jwt)
 
-    response = (
-        supabase.table("fridge_items")
-        .update({
-            "quantity": data.quantity,
-            "unit": data.unit.value,
-            "status": data.status.value,
-            "expire_date": data.expire_date.isoformat()
-        })
-        .eq("id", item_id)
-        .execute()
-    )
+    response = fridge_repository.update_item(jwt, item_id, data)
 
     return response.data
 
 def delete_item(jwt, item_id):
-    supabase = create_user_client(jwt)
-
-    response = (
-        supabase.table("fridge_items")
-        .delete()
-        .eq("id", item_id)
-        .execute()
-    )
-
+    response = fridge_repository.delete_item(jwt, item_id)
     return response.data

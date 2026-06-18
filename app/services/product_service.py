@@ -1,10 +1,5 @@
-from supabase import Client
-
 import requests
 
-# from config.supabase import supabase
-
-from app.database import create_user_client
 from app.config import HEADER_EMAIL
 from app.repositories import product_repository
 
@@ -54,11 +49,15 @@ def fetch_product(ean: str):
 
 # Checks in the database if the product exists, if not, adds a new product
 def get_or_create_product(jwt: str, ean: str):
-    existing = product_repository.get_product(jwt, ean)
+    new_ean = normalize_barcode(ean)
+    existing = product_repository.get_product(jwt, new_ean)
+    print(existing.data)
     
     if existing.data:
+        print("product exists in database")
         return existing.data[0]
-
+    print("product does not exist in database")
+    print(ean)
     product = fetch_product(ean)
 
     if product is None:
@@ -67,3 +66,9 @@ def get_or_create_product(jwt: str, ean: str):
     inserted = product_repository.add_new_product(jwt, product)
 
     return inserted.data[0]
+
+def normalize_barcode(barcode: str) -> str:
+    if barcode.startswith("(01)"):
+        return barcode[4:18].lstrip("0")
+
+    return barcode.lstrip("0")

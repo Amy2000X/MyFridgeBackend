@@ -5,13 +5,13 @@ from app.dependencies.auth_dependency import (
 )
 
 from app.schemas.fridge_schema import (
-    CreateFridgeItem,
+    # CreateFridgeItem,
     UpdateFridgeItem,
     ScanBarcodeRequest
 )
 
 from app.services.fridge_service import (
-    create_item,
+    # create_item,
     get_items,
     update_item,
     delete_item,
@@ -24,16 +24,16 @@ router = APIRouter(
 )
 
 
-@router.post("/")
-def create_fridge_item(
-    data: CreateFridgeItem,
-    auth=Depends(get_current_user)
-):
-    return create_item(
-        auth["token"],
-        auth["user"].id,
-        data
-    )
+# @router.post("/")
+# def create_fridge_item(
+#     data: CreateFridgeItem,
+#     auth=Depends(get_current_user)
+# ):
+#     return create_item(
+#         auth["token"],
+#         auth["user"].id,
+#         data
+#     )
 
 @router.post("/scan-barcode")
 def scan_barcode(
