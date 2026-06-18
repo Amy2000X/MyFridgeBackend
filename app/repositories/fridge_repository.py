@@ -31,5 +31,5 @@ def add_fridge_item(jwt, user_id, product):
         .execute()
     )
 
-    return response.data
+    return response
 

@@ -17,9 +17,9 @@ def create_item_from_barcode(jwt, user_id, ean):
     if product is None:
         raise Exception("Product not found")
 
-    data = fridge_repository.add_fridge_item(jwt, user_id, product)
+    response = fridge_repository.add_fridge_item(jwt, user_id, product)
 
-    return data
+    return response.data
 
 def create_item(jwt, user_id, data):
     supabase = create_user_client(jwt)

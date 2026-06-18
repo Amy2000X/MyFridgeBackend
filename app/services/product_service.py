@@ -6,8 +6,9 @@ import requests
 
 from app.database import create_user_client
 from app.config import HEADER_EMAIL
+from app.repositories import product_repository
 
-OPENFOODFACTS_URL = "https://world.openfoodfacts.org/api/v2/product"
+OPENFOODFACTS_URL = "https://world.openfoodfacts.org/api/v3/product"
 
 headers = {
     f"User-Agent": "MyFridge/0.1 ({HEADER_EMAIL})"
@@ -35,19 +36,12 @@ def parse_product(product_json: dict):
 def fetch_product(ean: str):
 
     try:
-        print(f"Searching OpenFoodFacts for {ean}")
-
         url = f"{OPENFOODFACTS_URL}/{ean}.json"
         response = requests.get(url, headers=headers, timeout=10)
-
-        print(url)
-        print("Status:", response.status_code)
 
         response.raise_for_status()
 
         data = response.json()
-
-        print(data)
 
         if data.get("status") == 0:
             return None
@@ -60,20 +54,8 @@ def fetch_product(ean: str):
 
 # Checks in the database if the product exists, if not, adds a new product
 def get_or_create_product(jwt: str, ean: str):
-
-    supabase = create_user_client(jwt)
-
-    print("Start search for product")
-    existing = (
-        supabase.table("products")
-        .select("*")
-        .eq("ean", ean)
-        .limit(1)
-        .execute()
-    )
+    existing = product_repository.get_product(jwt, ean)
     
-    print(existing)
-
     if existing.data:
         return existing.data[0]
 
@@ -82,12 +64,6 @@ def get_or_create_product(jwt: str, ean: str):
     if product is None:
         return None
 
-    inserted = (
-        supabase.table("products")
-        .insert(product)
-        .execute()
-    )
+    inserted = product_repository.add_new_product(jwt, product)
 
     return inserted.data[0]
-
-    return insert.data[0]
