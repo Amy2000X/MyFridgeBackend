@@ -7,32 +7,19 @@ from datetime import datetime, timedelta
 from app.services.product_service import get_or_create_product
 from app.database import create_user_client
 
+from app.repositories import fridge_repository
+
 
 def create_item_from_barcode(jwt, user_id, ean):
-
-    supabase = create_user_client(jwt)
 
     product = get_or_create_product(jwt, ean)
 
     if product is None:
         raise Exception("Product not found")
 
-    response = (
-        supabase.table("fridge_items")
-        .insert({
-            "user_id": user_id,
-            "product_id": product["id"],
-            "quantity": 1,
-            "unit": "pieces",
-            "status": "good",
-            "expire_date": (
-                datetime.utcnow() + timedelta(days=7)
-            ).isoformat()
-        })
-        .execute()
-    )
+    data = fridge_repository.add_fridge_item(jwt, user_id, product)
 
-    return response.data
+    return data
 
 def create_item(jwt, user_id, data):
     supabase = create_user_client(jwt)
