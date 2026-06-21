@@ -64,3 +64,20 @@ def search_recipes_by_ingredients(jwt, ingredients):
             matches.append(recipe)
 
     return matches
+
+def get_recipe_by_id(
+    jwt,
+    recipe_id
+):
+    supabase = create_user_client(jwt)
+
+    response = (
+        supabase
+        .table("new_recipes")
+        .select("*")
+        .eq("id", recipe_id)
+        .single()
+        .execute()
+    )
+
+    return response.data

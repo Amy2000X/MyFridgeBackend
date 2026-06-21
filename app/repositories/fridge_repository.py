@@ -59,6 +59,22 @@ def update_item(jwt, item_id, data):
 
     return response
 
+def update_fridge_item_quantity(jwt, fridge_item_id, quantity):
+    supabase = create_user_client(jwt)
+
+    return (
+        supabase
+        .table("fridge_items")
+        .update({
+            "quantity": quantity
+        })
+        .eq(
+            "id",
+            fridge_item_id
+        )
+        .execute()
+    )
+
 def delete_item(jwt, item_id):
     supabase = create_user_client(jwt)
 

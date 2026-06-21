@@ -9,3 +9,7 @@ class RecipeResponse(BaseModel):
     instructions: str
     image_name: str
     cleaned_ingredients: List[str]
+    
+class CookRecipeRequest(BaseModel):
+    recipe_id: int
+    force: bool = False
