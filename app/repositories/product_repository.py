@@ -1,9 +1,3 @@
-from supabase import Client
-
-import requests
-
-# from config.supabase import supabase
-
 from app.database import create_user_client
 from app.config import HEADER_EMAIL
 
