@@ -10,8 +10,8 @@ def get_all_recipes(jwt):
         .select("*")
         .execute()
     )
-    print("response excecuted")
-    print(response.data[0])
+    # print("response excecuted")
+    # print(response.data[0])
 
     return response
 

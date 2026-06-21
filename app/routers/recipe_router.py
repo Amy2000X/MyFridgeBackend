@@ -27,10 +27,8 @@ def get_all_recipes(
 
 @router.get("/search")
 def search_recipe(
-    ingredients: list[str] = Query(...),
     auth=Depends(get_current_user)
 ):
     return search_recipes(
         auth["token"],
-        ingredients
     )

@@ -14,6 +14,11 @@ CUSTOM_TRANSLATIONS = {
     "aardappel": "potato",
     "cherrytomaten": "cherry tomato",
     "parmezaanse kaas": "parmesan cheese",
+    "verse halfvolle melk": "milk",
+    "verse volle melk": "milk",
+    "halfvolle melk": "milk",
+    "volle melk": "milk",
+    "miso soup": "miso",
 }
 
 

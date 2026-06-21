@@ -1,28 +1,26 @@
-from ingredient_parser import parse_ingredient
+from app.services.translate_service import translate
 
 
-# def split_recipe_ingredients(ingredients: list[str]):
-def split_recipe_ingredients():
-    ingredients = [
-        "1 cup evaporated milk",
-        "1 cup whole milk",
-        "1 tsp. garlic powder",
-        "1 tsp. onion powder",
-        "1 tsp. smoked paprika",
-        "½ tsp. freshly ground black pepper",
-        "1 tsp. kosher salt, plus more",
-        "2 lb. extra-sharp cheddar, coarsely grated",
-        "4 oz. full-fat cream cheese",
-        "1 lb. elbow macaroni"
-        ]
-    clean_ingredients = []
+def get_normalized_fridge_ingredients(
+    fridge_items
+):
+    print(type(fridge_items))
+    print(fridge_items)
+    ingredients = set()
 
-    for one in ingredients:
+    for item in fridge_items:
 
-        result = parse_ingredient(one)
-        clean_ingredients.append(result)
-        print(result)
+        product_name = (
+            item["products"]["name"]
+        )
 
+        translated = translate(
+            product_name
+        )
+        print(translated)
 
+        ingredients.add(
+            translated.lower()
+        )
 
-    
+    return ingredients
