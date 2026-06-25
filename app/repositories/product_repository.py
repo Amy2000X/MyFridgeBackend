@@ -15,22 +15,7 @@ def get_product(jwt: str, ean: str):
         .execute()
     )
     return response
-    
-    if existing.data:
-        return existing.data[0]
 
-    product = fetch_product(ean)
-
-    if product is None:
-        return None
-
-    inserted = (
-        supabase.table("products")
-        .insert(product)
-        .execute()
-    )
-
-    return inserted.data[0]
 
 def add_new_product(jwt, product):
     supabase = create_user_client(jwt)
