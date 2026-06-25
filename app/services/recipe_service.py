@@ -69,6 +69,66 @@ def search_recipes(jwt):
 
     return results[:10]
 
+def search_ingredients(jwt, recipe_id):
+
+    fridge_items = (
+        fridge_repository.get_all_items(jwt)
+    )
+    print("Looking for recipe in recipe service")
+    print(f"recipe id: {recipe_id}")
+
+    recipe = (
+        recipe_repository.get_recipe_by_id(jwt, recipe_id)
+    )
+
+    fridge_ingredients = (
+        get_normalized_fridge_ingredients(
+            fridge_items
+        )
+    )
+
+    results = []
+
+    
+    recipe_ingredients = set(
+        ingredient.lower()
+        for ingredient in recipe[
+            "cleaned_ingredients"
+        ]
+    )
+
+    matches = (
+        fridge_ingredients
+        &
+        recipe_ingredients
+    )
+
+    missing = (
+        recipe_ingredients
+        -
+        fridge_ingredients
+    )
+
+    results.append({
+        "recipe": recipe,
+        "match_count": len(matches),
+        "total_ingredients": len(
+            recipe_ingredients
+        ),
+        "matched_ingredients": list(
+            matches
+        ),
+        "missing_ingredients": list(
+            missing
+        )
+    })
+
+    print(f"result recipe search:")
+    print(f"length: {len(results)}")
+    print(f"result: {results}")
+
+    return results
+
 def cook_recipe(
     jwt,
     recipe_id,

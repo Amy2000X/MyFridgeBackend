@@ -9,6 +9,7 @@ from app.schemas.recipe_schema import CookRecipeRequest
 from app.services.recipe_service import (
     get_recipes,
     search_recipes,
+    search_ingredients,
     cook_recipe
 )
 
@@ -34,6 +35,16 @@ def search_recipe(
 ):
     return search_recipes(
         auth["token"],
+    )
+
+@router.get("/search/{recipe_id}")
+def search_recipe(
+    recipe_id,
+    auth=Depends(get_current_user), 
+):
+    return search_ingredients(
+        auth["token"],
+        recipe_id
     )
 
 @router.post("/cook")
