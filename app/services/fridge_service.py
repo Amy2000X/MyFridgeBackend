@@ -15,7 +15,7 @@ def create_item_from_barcode(jwt, user_id, ean):
 
     response = fridge_repository.add_fridge_item(jwt, user_id, product)
 
-    return response.data
+    return response
 
 # def create_item(jwt, user_id, data):
 #     supabase = create_user_client(jwt)
@@ -38,16 +38,11 @@ def create_item_from_barcode(jwt, user_id, ean):
 #     return response.data
 
 def get_items(jwt):
-    response = fridge_repository.get_all_items(jwt)
-
-    return response.data
-
+    return fridge_repository.get_all_items(jwt)
+    
 def update_item(jwt, item_id, data):
+    return fridge_repository.update_item(jwt, item_id, data)
 
-    response = fridge_repository.update_item(jwt, item_id, data)
-
-    return response.data
 
 def delete_item(jwt, item_id):
-    response = fridge_repository.delete_item(jwt, item_id)
-    return response.data
+    return fridge_repository.delete_item(jwt, item_id)

@@ -26,7 +26,7 @@ def add_fridge_item(jwt, user_id, product):
         .execute()
     )
 
-    return response
+    return response.data
 
 def get_all_items(jwt):
     supabase = create_user_client(jwt)
@@ -40,7 +40,7 @@ def get_all_items(jwt):
         .execute()
     )
 
-    return response
+    return response.data
 
 def update_item(jwt, item_id, data):
     supabase = create_user_client(jwt)
@@ -57,7 +57,7 @@ def update_item(jwt, item_id, data):
         .execute()
     )
 
-    return response
+    return response.data
 
 def update_fridge_item_quantity(jwt, fridge_item_id, quantity):
     supabase = create_user_client(jwt)
@@ -85,5 +85,5 @@ def delete_item(jwt, item_id):
         .execute()
     )
 
-    return response
+    return response.data
 

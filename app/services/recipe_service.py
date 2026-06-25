@@ -6,43 +6,24 @@ from app.services.ingredient_service import get_normalized_fridge_ingredients
 from app.services.translate_service import translate
 
 def get_recipes(jwt):
-    print("service get recipe start")
     response = recipe_repository.get_all_recipes(jwt)
-
-    return response.data
-
-# This is with cleaned ingredients, but they are not clean.
-# def search_recipes(jwt, ingredients: list[str]):
-#     normalized = [
-#         ingredient.strip().lower()
-#         for ingredient in ingredients
-#     ]
-
-#     response = (
-#         recipe_repository.search_recipes_by_ingredients(
-#             jwt,
-#             normalized
-#         )
-#     )
-
-#     return response.data
+    return response
 
 def search_recipes(jwt):
 
     fridge_items = (
         fridge_repository.get_all_items(jwt)
-    ).data
+    )
 
     recipes = (
         recipe_repository.get_all_recipes(jwt)
-    ).data
+    )
 
     fridge_ingredients = (
         get_normalized_fridge_ingredients(
             fridge_items
         )
     )
-    print(fridge_ingredients)
 
     results = []
 
@@ -80,11 +61,6 @@ def search_recipes(jwt):
                 missing
             )
         })
-    print("FRIDGE INGREDIENTS:")
-    print(fridge_ingredients)
-
-    print("RECIPE INGREDIENTS:")
-    print(recipe["cleaned_ingredients"])
 
     results.sort(
         key=lambda x: x["match_count"],
@@ -132,13 +108,6 @@ def cook_recipe(
         "ingredient_unit"
     ]
 
-    print("cleaned:")
-    print(cleaned)
-    print("amount:")
-    print(amounts)
-    print("unit:")
-    print(units)
-
     for index, ingredient in enumerate(
         cleaned
     ):
@@ -162,10 +131,6 @@ def cook_recipe(
                 ingredient,
                 []
             )
-        )
-        print(
-            f"FOUND ITEMS: "
-            f"{len(ingredient_items)}"
         )
 
         available_amount = (
@@ -222,18 +187,9 @@ def build_inventory(fridge_items):
             product["name"]
         )
 
-        print(
-            f"FRIDGE PRODUCT: "
-            f"{product['name']} "
-            f"-> {translated_name}"
-        )
-
         inventory[
             translated_name
         ].append(item)
-
-    print("INVENTORY KEYS:")
-    print(list(inventory.keys()))
 
     return inventory
 

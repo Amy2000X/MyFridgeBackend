@@ -1,11 +1,7 @@
 from app.services.translate_service import translate
 
 
-def get_normalized_fridge_ingredients(
-    fridge_items
-):
-    print(type(fridge_items))
-    print(fridge_items)
+def get_normalized_fridge_ingredients(fridge_items):
     ingredients = set()
 
     for item in fridge_items:
@@ -17,7 +13,6 @@ def get_normalized_fridge_ingredients(
         translated = translate(
             product_name
         )
-        print(translated)
 
         ingredients.add(
             translated.lower()
